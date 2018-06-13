@@ -1,14 +1,15 @@
+from operator import attrgetter
 from os.path import exists, join, basename
 from os import makedirs, remove
 from six.moves import urllib
 import tarfile
+
+import quilt
 from torchvision.transforms import Compose, CenterCrop, ToTensor, Resize
 
-from dataset import DatasetFromFolder
+from dataset import DatasetFromFolder, DatasetFromPackage
 
-def install_bsd300(dest=None):
-    if dest:
-        environ['QUILT_PRIMARY_PACKAGE_DIR'] = dest
+def install_bsd300():
     # force to avoid y/n prompt; does not re-download
     PKG = 'akarve/BSDS300'
     quilt.install(PKG, force=True)
@@ -60,7 +61,7 @@ def target_transform(crop_size):
 
 def get_training_set(upscale_factor):
     pkg = install_bsd300()
-    train = getattr(pkg, 'images', 'train')
+    train = attrgetter('images.train')(pkg)
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 
     return DatasetFromPackage(train,
@@ -70,7 +71,7 @@ def get_training_set(upscale_factor):
 
 def get_test_set(upscale_factor):
     pkg = install_bsd300()
-    test = getattr(pkg, 'images', 'test')
+    test = attrgetter('images.test')(pkg)
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 
     return DatasetFromPackage(test,

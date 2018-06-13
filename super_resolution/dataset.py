@@ -1,15 +1,19 @@
-import torch.utils.data as data
-
 from os import listdir
 from os.path import join
+
 from PIL import Image
 
+from quilt.nodes import DataNode
+import torch.utils.data as data
 
 def is_image_file(filename):
     return any(filename.endswith(extension) for extension in [".png", ".jpg", ".jpeg"])
 
+# not used, but for posterity :)
+# how to do file extension introspection on Quilt nodes
 def is_image_node(node):
-    return any(node._meta['_system']['filepath'].endswith(extension) for extension in [".png", ".jpg", ".jpeg"])
+    if isinstance(node, DataNode) and node._meta['_system']['filepath']:
+        return any(node._meta['_system']['filepath'].endswith(extension) for extension in [".png", ".jpg", ".jpeg"])
 
 def load_img(filepath):
     img = Image.open(filepath).convert('YCbCr')
@@ -18,8 +22,8 @@ def load_img(filepath):
 
 class DatasetFromPackage(data.Dataset):
     def __init__(self, group, input_transform=None, target_transform=None):
-        super(DatasetFromFolder, self).__init__()
-        self.image_nodes = [x for x in group._data_keys() if is_image_node(x)]
+        super(DatasetFromPackage, self).__init__()
+        self.image_nodes = [x for x in group if is_image_node(x)]
 
         self.input_transform = input_transform
         self.target_transform = target_transform
