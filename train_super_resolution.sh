@@ -3,7 +3,7 @@
 # Entrypoint for Paperspace Job
 
 # read/write Quilt packages from/to persistent storage
-export QUILT_PRIMARY_PACKAGE_DIR='/storage/quilt_modules'
+export QUILT_PRIMARY_PACKAGE_DIR='/storage/quilt_packages'
 # working directory
 cd super_resolution
 # requirements
