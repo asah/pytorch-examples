@@ -9,7 +9,6 @@ import torch.utils.data as data
 def is_image_file(filename):
     return any(filename.endswith(extension) for extension in [".png", ".jpg", ".jpeg"])
 
-# not used, but for posterity :)
 # how to do file extension introspection on Quilt nodes
 def is_image_node(node):
     if isinstance(node, DataNode) and node._meta['_system']['filepath']:
