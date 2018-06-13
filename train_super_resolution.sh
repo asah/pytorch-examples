@@ -2,11 +2,12 @@
 # USAGE: bash train_super_resolution.sh N_EPOCHS
 # Entrypoint for Paperspace Job
 
-# requirements
-pip install -r super_resolution/requirements.txt
 # read/write Quilt packages from/to persistent storage
 export QUILT_PRIMARY_PACKAGE_DIR='/storage/quilt_modules'
+# working directory
 cd super_resolution
+# requirements
+pip install -r requirements.txt
 # default to 10 epochs (prefer ~500)
 N_EPOCHS=$1
 echo "Training for ${N_EPOCHS:=10} epochs\n"
