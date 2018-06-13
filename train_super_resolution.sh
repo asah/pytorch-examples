@@ -7,13 +7,14 @@ export QUILT_PRIMARY_PACKAGE_DIR='/storage/quilt_modules'
 
 cd super_resolution
 
-# Default to 10 epochs
-$1 := 10
+N_EPOCHS=$1
+# Default to 10
+echo "Training for ${N_EPOCHS:=10} epochs\n"
 
 python main.py \
 	--upscale_factor 3 \
 	--batchSize 4 \
 	--testBatchSize 100 \
-	--nEpochs $1 \
+	--nEpochs $N_EPOCHS \
 	--lr 0.001 \
 	--cuda
