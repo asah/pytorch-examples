@@ -8,6 +8,8 @@ export QUILT_PRIMARY_PACKAGE_DIR='/storage/quilt_packages'
 cd super_resolution
 # requirements
 pip install -r requirements.txt
+# directory for model artifacts
+mkdir -p /storage/models/super_resolution/
 # default to 10 epochs (prefer ~500)
 N_EPOCHS=$1
 echo "Training for ${N_EPOCHS:=10} epochs\n"
