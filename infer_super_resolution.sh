@@ -13,6 +13,6 @@ quilt export akarve/BSDS300/images/test/n$2 .
 
 python super_resolve.py \
 	--cuda \
-	--input_image mesmall.jpg \
+	--input_image images/test/$2.jpg \
 	--model /storage/models/super_resolution/model_epoch_$1.pth \
 	--output_filename /artifacts/super-$2.png
