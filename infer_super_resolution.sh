@@ -12,7 +12,7 @@ pip install -r requirements.txt
 quilt export akarve/BSDS300/images/test/n$2 .
 
 python super_resolve.py \
-	--cuda
+	--cuda \
 	--input_image mesmall.jpg \
 	--model /storage/models/super_resolution/model_epoch_$1.pth \
 	--output_filename /artifacts/super-$2.png
