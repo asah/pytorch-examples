@@ -4,16 +4,15 @@ from os import makedirs, remove
 from six.moves import urllib
 import tarfile
 
-import quilt
 from torchvision.transforms import Compose, CenterCrop, ToTensor, Resize
-
-from dataset import DatasetFromFolder, DatasetFromPackage
+from quilt.data.asa.torch import dataset
+from PIL import Image
+import quilt
 
 def install_bsd300():
     # force to avoid y/n prompt; does not re-download
     PKG = 'akarve/BSDS300'
     quilt.install(PKG, force=True)
-    return quilt.load(PKG);
 
 # use install_bsd300 instead
 def download_bsd300(dest="dataset"):
@@ -45,12 +44,18 @@ def calculate_valid_crop_size(crop_size, upscale_factor):
 
 
 def input_transform(crop_size, upscale_factor):
-    return Compose([
-        CenterCrop(crop_size),
-        Resize(crop_size // upscale_factor),
-        ToTensor(),
-    ])
+    def _inner(node):
+        path = node()
+        img = Image.open(path).convert('YCbCr')
+        y, _, _ = img.split()
 
+        return Compose([
+            CenterCrop(crop_size),
+            Resize(crop_size // upscale_factor),
+            ToTensor(),
+        ])(y)
+    
+    return _inner
 
 def target_transform(crop_size):
     return Compose([
@@ -58,22 +63,36 @@ def target_transform(crop_size):
         ToTensor(),
     ])
 
+def is_image(node):
+    """file extension introspection on Quilt nodes"""
+    if isinstance(node, DataNode):
+        filepath = node._meta.get('_system', {}).get('filepath')
+        if filepath:
+            return any(
+                filepath.endswith(extension)
+                for extension in [".png", ".jpg", ".jpeg"])
 
 def get_training_set(upscale_factor):
-    pkg = install_bsd300()
-    train = attrgetter('images.train')(pkg)
+    install_bsd300()
+    from quilt.data.akarve import BSDS300 as bsds
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 
-    return DatasetFromPackage(train,
-                             input_transform=input_transform(crop_size, upscale_factor),
-                             target_transform=target_transform(crop_size))
-
-
+    bsds.images.train(
+        asa=dataset(
+            include=is_image
+            input_transform=input_transform(crop_size, upscale_factor),
+            target_transform=target_transform(crop_size))
+        )) 
+     
 def get_test_set(upscale_factor):
-    pkg = install_bsd300()
-    test = attrgetter('images.test')(pkg)
+    install_bsd300()
+    from quilt.data.akarve import BSDS300 as bsds
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 
-    return DatasetFromPackage(test,
-                             input_transform=input_transform(crop_size, upscale_factor),
-                             target_transform=target_transform(crop_size))
+    bsds.images.test(
+        asa=dataset(
+            include=is_image
+            input_transform=input_transform(crop_size, upscale_factor),
+            target_transform=target_transform(crop_size))
+        )) 
+ 
