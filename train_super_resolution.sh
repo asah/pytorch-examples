@@ -7,7 +7,7 @@ export QUILT_PRIMARY_PACKAGE_DIR='/storage/quilt_packages'
 # working directory
 cd super_resolution
 # requirements
-pip install -r requirements.txt
+pip install -r super_resolution/requirements.txt
 # directory for model artifacts
 mkdir -p /storage/models/super_resolution/
 # default to 10 epochs (prefer ~500)

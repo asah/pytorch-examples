@@ -11,7 +11,7 @@ from  quilt.nodes import DataNode
 from PIL import Image
 import quilt
 
-def install_bsd300():
+def install_data():
     # force to avoid y/n prompt; does not re-download
     PKG = 'akarve/BSDS300'
     quilt.install(PKG, force=True)
@@ -58,7 +58,7 @@ def is_image(node):
                 for extension in [".png", ".jpg", ".jpeg"])
 
 def get_training_set(upscale_factor):
-    install_bsd300()
+    install_data()
     from quilt.data.akarve import BSDS300 as bsds
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 
