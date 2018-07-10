@@ -16,31 +16,6 @@ def install_bsd300():
     PKG = 'akarve/BSDS300'
     quilt.install(PKG, force=True)
 
-# use install_bsd300 instead
-def download_bsd300(dest="dataset"):
-    output_image_dir = join(dest, "BSDS300/images")
-
-    if not exists(output_image_dir):
-        makedirs(dest)
-        url = "http://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz"
-        print("downloading url ", url)
-
-        data = urllib.request.urlopen(url)
-
-        file_path = join(dest, basename(url))
-        with open(file_path, 'wb') as f:
-            f.write(data.read())
-
-        print("Extracting data")
-        with tarfile.open(file_path) as tar:
-            for item in tar:
-                tar.extract(item, dest)
-
-        remove(file_path)
-
-    return output_image_dir
-
-
 def calculate_valid_crop_size(crop_size, upscale_factor):
     return crop_size - (crop_size % upscale_factor)
 
