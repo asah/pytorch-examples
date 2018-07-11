@@ -14,6 +14,7 @@ mkdir -p /storage/models/super_resolution/
 N_EPOCHS=$1
 echo "Training for ${N_EPOCHS:=10} epochs\n"
 # train
+echo "$(python --version)"
 python main.py \
 	--upscale_factor 3 \
 	--batchSize 4 \
