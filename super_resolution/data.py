@@ -72,7 +72,7 @@ def get_training_set(upscale_factor):
     )
      
 def get_test_set(upscale_factor):
-    install_bsd300()
+    install_data()
     from quilt.data.akarve import BSDS300 as bsds
     crop_size = calculate_valid_crop_size(256, upscale_factor)
 
