@@ -7,7 +7,7 @@ import tarfile
 
 from torchvision.transforms import Compose, CenterCrop, ToTensor, Resize
 from quilt.asa.pytorch import dataset
-from  quilt.nodes import DataNode
+from quilt.nodes import DataNode
 from PIL import Image
 import quilt
 
